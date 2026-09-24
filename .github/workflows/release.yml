@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [win-x64, linux-x64, osx-x64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Publish (${{ matrix.runtime }})
+        run: >
+          dotnet publish ConfigC/ConfigC.csproj
+          -c Release
+          -r ${{ matrix.runtime }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -o publish/${{ matrix.runtime }}
+
+      - name: Zip artifact
+        run: |
+          cd publish/${{ matrix.runtime }}
+          zip -r ../../ConfigC-${{ matrix.runtime }}.zip .
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ConfigC-${{ matrix.runtime }}.zip
