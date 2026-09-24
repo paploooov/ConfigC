@@ -24,11 +24,6 @@ resolution, keybinds, and sometimes local saves all over again.
 and copies the whole `userdata` folder for you — safely, with a progress bar
 and a summary of what happened.
 
-> This was the author's first real C# project. This update keeps the
-> original idea intact and rebuilds everything around it: a safer copy
-> engine, cross-platform Steam detection, readable account names instead of
-> raw SteamIDs, and a proper terminal UI.
-
 ## Features
 
 - 🔍 **Auto-detects Steam** on Windows, Linux and macOS (registry on Windows;
